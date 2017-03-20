@@ -1,0 +1,34 @@
+{
+        "user":{
+            "properties":{
+                "firstName":{
+                    "type":"string",
+                    "analyzer":"autocomplete_edge_analyzer"
+                },
+                "middleName":{
+                    "type":"string",
+                    "analyzer":"autocomplete_edge_analyzer"
+                },
+                "lastName":{
+                    "type":"string",
+                    "analyzer":"autocomplete_edge_analyzer"
+                },
+                "location":{
+                    "type":"string",
+                    "analyzer":"autocomplete_edge_analyzer"
+                },
+                "primaryInstitution":{
+                    "type":"string",
+                    "analyzer":"autocomplete_edge_analyzer"
+                },
+                "interest":{
+                    "type":"string",
+                    "analyzer":"autocomplete_edge_analyzer"
+                },
+                "role":{
+                    "type":"string",
+                    "analyzer":"autocomplete_edge_analyzer"
+                }
+            }
+        }
+}

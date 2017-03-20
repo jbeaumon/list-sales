@@ -1,0 +1,16 @@
+{
+    "organization":{
+        "properties":{
+            "preferred-name":{
+                "type":"string",
+                "analyzer":"autocomplete_ngram_analyzer"
+            },
+            "id":{
+                "type":"string"
+            },
+            "parent-id":{
+                "type":"string"
+            }
+        }
+    }
+}

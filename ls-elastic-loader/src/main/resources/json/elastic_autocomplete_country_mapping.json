@@ -1,0 +1,13 @@
+{
+    "country":{
+        "properties":{
+            "name":{
+                "type":"string",
+                "analyzer":"autocomplete_ngram_analyzer"
+            },
+            "id":{
+                "type":"string"
+            }
+        }
+    }
+}

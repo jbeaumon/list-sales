@@ -1,0 +1,120 @@
+apply plugin: 'distribution'
+apply plugin: 'java-library-distribution'
+apply plugin: 'os-package'
+
+sourceCompatibility = 1.8
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+eclipse {
+	classpath {
+		downloadSources = true
+	}
+}
+task baselineJar(type: Jar) {
+    zip64 = true
+    manifest {
+        attributes ('Implementation-Title': '1p-profile-ingest baseline jar',
+                    'Implementation-Version': 1.0,
+                    'Main-Class' : 'com.thomsonreuters.profile.ingest.Ingester')
+    }
+    baseName = project.name + '-baseline'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    exclude ('META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
+    with jar
+}
+
+task elasticJar(type: Jar) {
+    zip64 = true
+    manifest {
+        attributes ('Implementation-Title': '1p-profile-ingest Elastic utils jar',
+                    'Implementation-Version': 1.0,
+                    'Main-Class' : 'com.thomsonreuters.util.ElasticUtils')
+    }
+    baseName = project.name + '-elastic'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    into ('src/main/resources') {  from('src/main/resources'){ include  '*.json'}}
+    exclude ('META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
+    with jar
+}
+
+task cassandraJar(type: Jar) {
+    zip64 = true
+    manifest {
+        attributes ('Implementation-Title': '1p-profile-ingest Cassandra utils jar',
+                    'Implementation-Version': 1.0,
+                    'Main-Class' : 'com.thomsonreuters.util.CassandraUtils')
+    }
+    baseName = project.name + '-cassandra'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    into ('src/main/resources') {  from('src/main/resources'){ include  '*.json'}}
+    exclude ('META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
+    with jar
+}
+
+dependencies { 		
+	compile('org.quartz-scheduler:quartz:2.2.1')
+	compile group: 'io.searchbox',       name: 'jest',        version: '0.1.6'
+	compile('org.cassandraunit:cassandra-unit:2.1.3.1')
+	compile group: 'com.datastax.cassandra',   name: 'cassandra-driver-core',     version: '2.1.5'
+   	compile group: 'org.eclipse.persistence', name:'javax.persistence',  version: '2.0.5'
+   	compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+   	compile (group: 'com.impetus.kundera.client', name: 'kundera-cassandra', version: '2.16')  {
+      exclude group: 'junit'
+    }
+    compile(group: 'org.elasticsearch', name: 'elasticsearch', version: '1.6.0') {
+        exclude group: 'org.ow2.asm'
+    }
+    compile group:'com.googlecode.json-simple', name:'json-simple', version:'1.1.1'
+  
+	compile (group: 'org.brickred', name: 'socialauth', version: '4.7')  {
+			exclude group: 'javax.servlet'
+		}
+  	compile group: 'com.auth0',          name: 'java-jwt',      version: '2.0.1'
+  	compile group: 'org.modelmapper', name: 'modelmapper', version: '0.7.3'
+  	compile group: 'org.cassandraunit', name: 'cassandra-unit', version: '2.1.3.1'
+
+    compile group: 'com.netflix.archaius', name: 'archaius-core', version: '0.6.5'
+
+    compile group: 'commons-io', name: 'commons-io', version: '2.4'
+
+    testCompile group: 'com.sun.jersey.jersey-test-framework', name: 'jersey-test-framework-core', version: "${jersey_version}"
+    testCompile group: 'com.sun.jersey.jersey-test-framework', name: 'jersey-test-framework-external', version: "${jersey_version}"
+
+  	testCompile group: 'com.thomsonreuters', name: '1p-cassandra-common', version: '0.7.+'
+  	testCompile group:'org.mockito', name:'mockito-all', version: '1.9.5'
+}
+
+def permanentPackageName =  project.name
+def group = 'thomsonreuters-1p'
+def rpmRelease = 1
+
+def snapshot = true
+if (snapshot) { rpmRelease = 'SNAPSHOT' }
+
+ospackage {
+  packageName = permanentPackageName
+  release = rpmRelease
+  arch = NOARCH
+  os = LINUX
+  from(file('root/etc/reuters/karyon')) {
+    into('/etc/reuters')
+    user 'root'
+    permissionGroup 'root'
+  }
+
+  from("src/main/resources/json") { 
+    into('/opt/reuters/apps/karyon/src/main/resources/json')
+    user 'karyon'
+    permissionGroup 'karyon'
+  }
+
+  from("build/install/"+name) { 
+    into('/opt/reuters/apps/karyon')
+    user 'karyon'
+    permissionGroup 'karyon'
+  }
+}
+
+buildRpm.dependsOn installDist
+

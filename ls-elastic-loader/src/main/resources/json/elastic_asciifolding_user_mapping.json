@@ -1,0 +1,34 @@
+{
+        "user":{
+            "properties":{
+                "firstName":{
+                    "type":"string",
+                    "analyzer":"asciifolding_analyzer"
+                },
+                "middleName":{
+                    "type":"string",
+                    "analyzer":"asciifolding_analyzer"
+                },
+                "lastName":{
+                    "type":"string",
+                    "analyzer":"asciifolding_analyzer"
+                },
+                "location":{
+                    "type":"string",
+                    "analyzer":"asciifolding_analyzer"
+                },
+                "primaryInstitution":{
+                    "type":"string",
+                    "analyzer":"asciifolding_analyzer"
+                },
+                "interest":{
+                    "type":"string",
+                    "analyzer":"asciifolding_analyzer"
+                },
+                "role":{
+                    "type":"string",
+                    "analyzer":"asciifolding_analyzer"
+                }
+            }
+        }
+}

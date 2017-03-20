@@ -1,0 +1,1 @@
+KARYON_CLASS_NAME="com.thomsonreuters.quartz.drivers.PollCassandraUpdatesDriver"
