@@ -44,6 +44,7 @@ import org.json.simple.parser.JSONParser;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.google.gson.JsonObject;
+import com.netflix.governator.annotations.Configuration;
 
 public class ElasticUtils {
   private static final Logger LOG = LoggerFactory.getLogger(ElasticUtils.class);
@@ -55,6 +56,9 @@ public class ElasticUtils {
   private static final String defaultUserDataJson = "json/elastic_users_mock_data.json";
   private static final String defaultCountryMappingJson = "json/elastic_country_mapping.json";
   private static final String defaultOrgMappingJson = "json/elastic_organization_mapping.json";
+
+	@Configuration("listsales.elastic.url")
+	  public static String elasticUrl = "localhost";
 
   private static final String defaultUserDataPath = 
         "./src/main/resources/json/elastic_users_mock_data.json";
@@ -520,6 +524,8 @@ public class ElasticUtils {
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		opArgs = args;
 		init("http://localhost", 9200, null);
+		
+		System.out.println("JSB : " + elasticUrl);
 		if (cmdArgs.hasOption(dumpOp)) {
 			dumpOptions();
 		}

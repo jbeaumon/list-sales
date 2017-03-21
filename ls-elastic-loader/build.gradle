@@ -54,7 +54,7 @@ task cassandraJar(type: Jar) {
 
 dependencies { 		
 	compile('org.quartz-scheduler:quartz:2.2.1')
-	compile group: 'io.searchbox',       name: 'jest',        version: '0.1.6'
+	compile group: 'io.searchbox',       name: 'jest',        version: '2.0.0'
 	compile('org.cassandraunit:cassandra-unit:2.1.3.1')
 	compile group: 'com.datastax.cassandra',   name: 'cassandra-driver-core',     version: '2.1.5'
    	compile group: 'org.eclipse.persistence', name:'javax.persistence',  version: '2.0.5'
